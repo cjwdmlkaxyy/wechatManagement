@@ -1,0 +1,251 @@
+<div class="fsh-rightPanel">
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">多文本</li>
+            <li>单文本</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="main-body"></div>
+                <div class="layui-row">
+                    <div class="layui-col-md12 flex flex-justify-end" style="display: flex;">
+                       <!-- <input type="text" class="input-style margin-l-r-5 layui-input" placeholder="请输入关键字" />
+                        <input type="text" class="input-style margin-l-r-5 layui-input" placeholder="请选择时间" id="startTime"/>
+                        <input type="text" class="input-style margin-l-r-5 layui-input" placeholder="请选择时间" id="endTime"/>
+                        <button class="layui-btn layui-btn-radius layui-btn-normal margin-l-r-5">搜索</button>-->
+                        <button class="layui-btn layui-btn-radius layui-btn-normal margin-l-r-5" onclick="loadXMLDoc('./material/document/addSingle')">添加单图文消息</button>
+                        <button class="layui-btn layui-btn-radius layui-btn-normal margin-l-r-5" onclick="loadXMLDoc('./material/document/addmultiple')">添加多图文消息</button>
+                    </div>
+                </div>
+                <div class="layui-row" style="padding-top: 20px;">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="50">
+                            <col width="200">
+                            <col width="200">
+                            <col width="200">
+                            <col width="200">
+                            <col width="150">
+                            <col width="500">
+                            <col width="150">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>创建时间</th>
+                            <th>更新时间</th>
+                            <th>素材ID</th>
+                            <th>图文消息</th>
+                            <th>是否发送</th>
+                            <th>图文消息内容</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="flex flex-justify-end" id="laypage"></div>
+                </div>
+            </div>
+            <div class="layui-tab-item">内容2</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getData() {
+        $.ajax({
+            type: 'GET',
+            url: url + '/wx/material/getMaterial/1/20',
+            Accept: 'application/json',
+            headers: {
+                'token': Token,
+                'JSESSIONID': '037BF9BC534D2E0577233F2C24C0D1B1',
+            },
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (res) {
+                console.log(res);
+                const tbody = $('.layui-table tbody');
+                const pageConfig = {
+                    pageNum: res.data.pageNum,
+                    pageSize: res.data.pageSize,
+                    totalSize: res.data.totalSize,
+                    totalPages: res.data.totalPage
+                };
+                const data = res.data.content;
+                data.forEach((item, index) => {
+                    const createTime = moment(item.createTime).format('YYYY-MM-DD HH:mm:ss');
+                    const lastUpdateTime = moment(item.lastUpdateTime).format('YYYY-MM-DD HH:mm:ss');
+                    const isSend = item.sendFlag == 0 ? '未发送' : '已发送';  // 1: 已发送 0: 未发送
+                    const btnStyle = item.sendFlag == 1 ? 'cursor: not-allowed' : 'cursor: pointer';
+                    const el = `<tr>
+                                <td>${index + 1}</td>
+                                <td>${createTime}</td>
+                                <td>${lastUpdateTime}</td>
+                                <td>${item.materialId}</td>
+                                <td>${item.type}</td>
+                                <td>${isSend}</td>
+                                <td class="text-wrap" style="max-width: 620px;">${item.content}</td>
+                                <td>
+                                    <button class="layui-btn layui-btn-radius layui-btn-sm sendTag"
+                                            style="${btnStyle}"
+                                            sendTag="${item.sendFlag}"
+                                            msgType="${item.type}"
+                                            mediaId="${item.mediaId}">发送</button>
+                                </td>
+                            </tr>`;
+                    tbody.append(el);
+                });
+                $('.sendTag').click(function (e) {
+                    const el = e.currentTarget;
+                    const msgType = el.attributes.msgtype.value;
+                    const mediaId = el.attributes.mediaid.value;
+                    const sendFlag = el.attributes.sendtag.value;
+                    if (sendFlag == 0) {
+                        sendTag(msgType, mediaId);
+                    }
+                })
+
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    }
+    function sendTag(type, mediaId) {
+        const data = {
+            mpnews: {
+                media_id: mediaId
+            },
+            msgtype: type
+        };
+        $.ajax({
+            type: 'POST',
+            url: url + '/wx/message/sendTag',
+            Accept: '*/*',
+            headers: {
+                'token': Token,
+                'JSESSIONID': '037BF9BC534D2E0577233F2C24C0D1B1',
+                'Content-Type': 'application/json'
+            },
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            success: res => {
+                console.log(res);
+            },
+            error: err => {
+
+            }
+        })
+    }
+    function testData() {
+        const tbody = $('.layui-table tbody');
+        const test = [
+            {
+                "id": 170,
+                "createBy": null,
+                "createTime": null,
+                "lastUpdateBy": null,
+                "lastUpdateTime": "2020-02-27T13:25:21.000+0000",
+                "materialId": "1582809921830",
+                "mediaId": "u8AX6wiuCq2_Srp_l3JG4MW-FFDCmojo6NXpum5NIsg",
+                "url": null,
+                "type": "mpnews",
+                "path": null,
+                sendFlag: 1,
+                "content": "{\"articles\":[{\"thumb_media_id\":\"u8AX6wiuCq2_Srp_l3JG4PCMbhVP8teXRCj_tzH8NHk\",\"thumb_url\":\"http://mmbiz.qpic.cn/mmbiz_jpg/5sjvwpkp4mrGRBQsndrx50VTdMQVqomQAKIlic5FWOqTuwNH7ibh0rGkkX7dQ6kfTNexFGydMu2zuEqm8ibqxeoAw/0?wx_fmt=jpeg\",\"title\":\"single title\",\"content\":\"single content\",\"author\":\"author\",\"content_source_url\":\"http://content url\",\"digest\":\"single news\",\"show_cover_pic\":\"1\",\"url\":\"http://mp.weixin.qq.com/s?__biz=MzI1NTMzOTAyMQ==&mid=100000083&idx=1&sn=090d83c2415a829583b3076350dc9f38&chksm=6a363e315d41b7271d70de59f39a6af36f98528dec3b5dd7a77f8dfcf09474b25faa41e4c406#rd\",\"need_open_comment\":0,\"only_fans_can_comment\":0}],\"create_time\":\"2020-2-24 21:46:17\",\"update_time\":\"2020-2-24 21:46:17\"}"
+            },
+            {
+                "id": 171,
+                "createBy": null,
+                "createTime": null,
+                "lastUpdateBy": null,
+                "lastUpdateTime": "2020-02-27T13:25:21.000+0000",
+                "materialId": "1582809922187",
+                "mediaId": "u8AX6wiuCq2_Srp_l3JG4CIqP47TUw5rKOe7scrJbdk",
+                "url": null,
+                "type": "mpnews",
+                "path": null,
+                sendFlag: 0,
+                "content": "{\"articles\":[{\"thumb_media_id\":\"u8AX6wiuCq2_Srp_l3JG4MPNLX_1-O9wTAvrGetJUzY\",\"thumb_url\":\"http://mmbiz.qpic.cn/mmbiz_jpg/5sjvwpkp4mqPamRc2A4d5govqYib4fCORJiaibsk4XhvsWzCXicxINOH7nDqWcFiaqTFegL1RLAlES0yS6Yyic9Z7iaxQ/0?wx_fmt=jpeg\",\"title\":\"test\",\"content\":\"test\",\"author\":\"test\",\"content_source_url\":\"http://test\",\"digest\":\"test\",\"show_cover_pic\":\"0\",\"url\":\"http://mp.weixin.qq.com/s?__biz=MzI1NTMzOTAyMQ==&mid=100000004&idx=1&sn=5bc4c294abfd656fa8b07bd3340faceb&chksm=6a363e665d41b7706b93f83c0db995b4e4881c6718149aec5fb08f8548217aa24212dda14d4f#rd\",\"need_open_comment\":1,\"only_fans_can_comment\":0}],\"create_time\":\"2019-12-2 17:25:41\",\"update_time\":\"2019-12-2 17:25:41\"}"
+            }
+        ]
+        test.forEach((item, index) => {
+            const createTime = moment(item.createTime).format('YYYY-MM-DD HH:mm:ss');
+            const lastUpdateTime = moment(item.lastUpdateTime).format('YYYY-MM-DD HH:mm:ss');
+            const isSend = item.sendFlag == 0 ? '未发送' : '已发送';  // 1: 已发送 0: 未发送
+            const btnStyle = item.sendFlag == 1 ? 'cursor: not-allowed' : 'cursor: pointer';
+            const el = `<tr>
+                                <td>${index + 1}</td>
+                                <td>${createTime}</td>
+                                <td>${lastUpdateTime}</td>
+                                <td>${item.materialId}</td>
+                                <td>${item.type}</td>
+                                <td>${isSend}</td>
+                                <td class="text-wrap" style="max-width: 620px;">${item.content}</td>
+                                <td>
+                                    <button class="layui-btn layui-btn-radius layui-btn-sm sendTag"
+                                            style="${btnStyle}"
+                                            sendTag="${item.sendFlag}"
+                                            msgType="${item.type}"
+                                            mediaId="${item.mediaId}">发送</button>
+                                </td>
+                            </tr>`;
+            tbody.append(el);
+        });
+        $('.sendTag').click(function (e) {
+            const el = e.currentTarget;
+            const msgType = el.attributes.msgtype.value;
+            const mediaId = el.attributes.mediaid.value;
+            const sendFlag = el.attributes.sendtag.value;
+            if (sendFlag == 0) {
+                sendTag(msgType, mediaId);
+            }
+        })
+    }
+
+    layui.use('laypage', function () {
+        const laypage = layui.laypage;
+        laypage.render({
+            elem: 'laypage',
+            count: 100,
+            layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip'],
+            jump: function(obj){
+                console.log(obj)
+            }
+        })
+    });
+    // 选项卡 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+
+    // 初始化插件
+    function initPlugin() {
+        // 分页
+        console.log(11);
+
+
+    }
+    function init() {
+        // testData();
+        getData(); // 获取数据
+        initPlugin();
+
+    }
+
+    function addNews(flag) {
+        $.ajax({
+            type: 'GET',
+            url: './addSingle.html',
+            success: function (data) {
+                $('#page_content').append(data)
+            }
+        });
+        return false;
+    }
+
+
+    init();
+</script>

@@ -1,0 +1,192 @@
+
+/****flex*******/
+.flex {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.flex-auto {
+    -webkit-box-flex: 1;
+    -ms-flex: auto;
+    flex: auto;
+}
+
+.flex-row {
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+
+.flex-row-reverse {
+    -ms-flex-direction: row-reverse;
+    -webkit-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+}
+
+.flex-column {
+    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+
+.flex-column-reverse {
+    -ms-flex-direction: column-reverse;
+    -webkit-flex-direction: column-reverse;
+    flex-direction: column-reverse;
+}
+
+.flex-items-center {
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.flex-items-start {
+    -ms-flex-align: start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+}
+
+.flex-items-end {
+    -ms-flex-align: end;
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+}
+
+.flex-items-baseline {
+    -ms-flex-align: baseline;
+    -webkit-align-items: baseline;
+    align-items: baseline;
+}
+
+.flex-items-stretch {
+    -ms-flex-align: stretch;
+    -webkit-align-items: stretch;
+    align-items: stretch;
+}
+
+.flex-align-start {
+    -ms-flex-line-pack: start;
+    align-content: flex-start;
+}
+
+.flex-align-end {
+    -ms-flex-line-pack: end;
+    align-content: flex-end;
+}
+
+.flex-align-center {
+    -ms-flex-line-pack: center;
+    align-content: center;
+}
+
+.flex-align-between {
+    -ms-flex-line-pack: justify;
+    align-content: space-between;
+}
+
+.flex-align-around {
+    -ms-flex-line-pack: distribute;
+    align-content: space-around;
+}
+
+.flex-align-around {
+    -ms-flex-line-pack: stretch;
+    align-content: stretch;
+}
+
+.flex-justify-center {
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+
+.flex-justify-start {
+    -ms-flex-pack: start;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+}
+
+.flex-justify-end {
+    -ms-flex-pack: end;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+}
+
+.flex-justify-between {
+    -ms-flex-pack: justify;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+
+.flex-justify-around {
+    -webkit-justify-content: space-around;
+    justify-content: space-around;
+}
+
+.flex-wrap {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.flex-wrap-nowrap {
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+}
+
+.flex-wrap-reverse {
+    -ms-flex-wrap: wrap-reverse;
+    flex-wrap: wrap-reverse;
+}
+
+.flex-self-start {
+    -ms-flex-item-align: start;
+    align-self: flex-start;
+}
+
+.flex-self-end {
+    -ms-flex-item-align: end;
+    align-self: flex-end;
+}
+
+.flex-self-baseline {
+    -ms-flex-item-align: baseline;
+    align-self: baseline;
+}
+
+.flex-self-center {
+    -ms-flex-item-align: center;
+    align-self: center;
+}
+
+.flex-self-stretch {
+    -ms-flex-item-align: stretch;
+    align-self: stretch;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+.flex-flow-row {
+    flex-flow: row wrap;
+}
+/******flex end*********/
+.input-style {
+    border-radius: 20px;
+    border:0;
+    padding-left: 20px;
+    width: 220px;
+}
+.main-body {
+    padding: 15px;
+}
+.margin-l-r-5 {
+    margin: 0 5px;
+}
+.text-wrap {
+    white-space: nowrap;      /*超出的空白区域不换行*/
+    overflow: hidden;         /*超出隐藏*/
+    text-overflow: ellipsis;  /*文本超出显示省略号*/
+}
